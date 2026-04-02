@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sage Yoga Studio - Schedule & Booking</title>
+<meta name="description" content="Book yoga classes at Sage Yoga Studio. Vinyasa, Yin, Power, and Hatha classes available.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito Sans', 'Segoe UI', sans-serif;
+    background: linear-gradient(160deg, #f7f4ef 0%, #ede8df 50%, #e8e2d6 100%);
+    min-height: 100vh; color: #3a3530;
+  }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; }
+
+  /* Header */
+  .header { background: linear-gradient(135deg, #5a7c52 0%, #4a6b44 100%); padding: 28px 24px 22px; color: #fff; }
+  .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .header h1 { font-size: 28px; font-weight: 600; letter-spacing: 0.5px; }
+  .header .subtitle { font-size: 13px; opacity: 0.85; margin-top: 4px; font-weight: 300; }
+  .stat-box { text-align: center; background: rgba(255,255,255,0.15); border-radius: 10px; padding: 8px 16px; }
+  .stat-box .num { font-size: 22px; font-weight: 700; }
+  .stat-box .label { opacity: 0.8; font-size: 11px; }
+  .stats-row { display: flex; gap: 16px; font-size: 13px; }
+
+  /* Tabs */
+  .tabs { max-width: 900px; margin: 0 auto; border-bottom: 1px solid #d4cfc6; display: flex; gap: 4px; padding: 0 24px; }
+  .tab-btn { padding: 10px 20px; border: none; background: transparent; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 14px; color: #8a7e6b; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .tab-btn.active { color: #5a7c52; border-bottom-color: #5a7c52; }
+  .tab-btn:hover { color: #5a7c52; }
+
+  /* Main */
+  .main { max-width: 900px; margin: 0 auto; padding: 20px 24px 40px; }
+
+  /* Pills */
+  .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .day-pill { padding: 8px 16px; border-radius: 20px; border: 1.5px solid #d4cfc6; background: #fff; cursor: pointer; font-size: 13px; font-weight: 600; color: #6b6560; transition: all 0.2s; font-family: inherit; }
+  .day-pill.active { background: #5a7c52; color: #fff; border-color: #5a7c52; }
+  .day-pill:hover { border-color: #8a7e6b; }
+
+  .type-pill { padding: 5px 14px; border-radius: 16px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit; transition: all 0.2s; }
+
+  /* Cards */
+  .card { background: #fff; border-radius: 12px; padding: 18px; transition: all 0.25s ease; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .type-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px; display: inline-block; margin-bottom: 6px; }
+  .class-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .class-info { font-size: 13px; color: #7a756e; line-height: 1.7; }
+
+  /* Buttons */
+  .btn { border: none; cursor: pointer; border-radius: 8px; font-family: inherit; transition: all 0.2s ease; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn-book { width: 100%; padding: 10px 0; color: #fff; font-size: 14px; font-weight: 600; margin-top: 12px; }
+  .btn-primary { padding: 11px 0; background: #5a7c52; color: #fff; font-size: 14px; font-weight: 600; flex: 1; border-radius: 8px; }
+  .btn-secondary { padding: 11px 0; background: #e8e4dc; color: #6b6560; font-size: 14px; font-weight: 600; flex: 1; border-radius: 8px; }
+  .btn-danger { padding: 7px 16px; background: #f0e0e0; color: #9a4a4a; font-size: 13px; font-weight: 600; }
+  .btn-danger-sm { padding: 5px 14px; background: #f5eded; color: #9a4a4a; font-size: 12px; font-weight: 600; }
+  .btn-add { padding: 10px 20px; background: #5a7c52; color: #fff; font-size: 14px; font-weight: 600; }
+
+  /* Booking list */
+  .booking-row { background: #fff; border-radius: 10px; padding: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .booking-name { font-weight: 700; font-size: 15px; }
+  .booking-detail { font-size: 13px; color: #7a756e; margin-top: 3px; }
+
+  /* Manage list */
+  .manage-row { background: #fff; border-radius: 10px; padding: 12px 16px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .manage-info { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .manage-meta { font-size: 13px; color: #7a756e; }
+  .day-label { font-size: 14px; font-weight: 600; color: #8a7e6b; margin: 12px 0 6px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* Modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(58,53,48,0.4); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 100; }
+  .modal { background: #fff; border-radius: 16px; padding: 28px; width: 90%; max-width: 420px; box-shadow: 0 16px 48px rgba(0,0,0,0.12); animation: fadeIn 0.3s ease; max-height: 85vh; overflow-y: auto; }
+  .modal h3 { font-size: 22px; margin-bottom: 4px; }
+  .modal .modal-sub { font-size: 13px; color: #7a756e; margin-bottom: 20px; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+  /* Form */
+  .form-group { margin-bottom: 12px; }
+  .form-label { font-size: 12px; font-weight: 600; color: #6b6560; margin-bottom: 4px; display: block; }
+  .form-input { font-family: inherit; font-size: 14px; padding: 10px 14px; border: 1.5px solid #d4cfc6; border-radius: 8px; background: #fff; color: #3a3530; outline: none; width: 100%; transition: border-color 0.2s; }
+  .form-input:focus { border-color: #8a7e6b; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* Empty state */
+  .empty { text-align: center; padding: 40px; color: #8a7e6b; }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+  /* Toast */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #3a3530; color: #fff; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.15); animation: slideToast 0.3s ease; z-index: 200; }
+
+  /* Reset section */
+  .reset-section { margin-top: 32px; padding: 20px; background: #faf5f0; border-radius: 12px; border: 1px solid #e8e0d6; }
+  .reset-section h4 { font-size: 14px; font-weight: 600; color: #9a4a4a; margin-bottom: 8px; }
+  .reset-section p { font-size: 13px; color: #7a756e; margin-bottom: 12px; }
+  .btn-reset { padding: 8px 20px; background: #d9a0a0; color: #fff; font-size: 13px; font-weight: 600; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideToast { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  .fade-in { animation: fadeIn 0.3s ease; }
+
+  @media (max-width: 640px) {
+    .pill-row { gap: 6px; }
+    .day-pill { padding: 6px 10px; font-size: 11px; }
+    .class-grid { gap: 10px; }
+    .header h1 { font-size: 22px; }
+    .stats-row { gap: 8px; }
+    .stat-box { padding: 6px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const SHORT_DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+
+const DEFAULT_CLASSES = [
+  {id:"c1",name:"Morning Flow",day:"Monday",time:"07:00",duration:60,instructor:"Sage",capacity:12,type:"Vinyasa"},
+  {id:"c2",name:"Gentle Stretch",day:"Monday",time:"10:00",duration:45,instructor:"Sage",capacity:8,type:"Yin"},
+  {id:"c3",name:"Power Yoga",day:"Tuesday",time:"07:00",duration:60,instructor:"Sage",capacity:12,type:"Power"},
+  {id:"c4",name:"Lunchtime Reset",day:"Tuesday",time:"12:00",duration:30,instructor:"Sage",capacity:10,type:"Hatha"},
+  {id:"c5",name:"Evening Calm",day:"Wednesday",time:"18:00",duration:60,instructor:"Sage",capacity:12,type:"Yin"},
+  {id:"c6",name:"Morning Flow",day:"Wednesday",time:"07:00",duration:60,instructor:"Sage",capacity:12,type:"Vinyasa"},
+  {id:"c7",name:"Sunrise Yoga",day:"Thursday",time:"06:30",duration:60,instructor:"Sage",capacity:10,type:"Hatha"},
+  {id:"c8",name:"Core & Balance",day:"Thursday",time:"17:30",duration:45,instructor:"Sage",capacity:12,type:"Power"},
+  {id:"c9",name:"Weekend Flow",day:"Friday",time:"09:00",duration:75,instructor:"Sage",capacity:15,type:"Vinyasa"},
+  {id:"c10",name:"Restorative",day:"Saturday",time:"10:00",duration:90,instructor:"Sage",capacity:8,type:"Yin"},
+  {id:"c11",name:"Community Class",day:"Saturday",time:"14:00",duration:60,instructor:"Sage",capacity:20,type:"Hatha"},
+  {id:"c12",name:"Sunday Slow",day:"Sunday",time:"09:00",duration:75,instructor:"Sage",capacity:10,type:"Yin"},
+];
+
+const TYPE_COLORS = {
+  Vinyasa:{bg:"#e8f0e4",accent:"#5a7c52",badge:"#d0e4c8"},
+  Yin:{bg:"#e8e4f0",accent:"#6b5c8a",badge:"#d4cce6"},
+  Power:{bg:"#f0e8e0",accent:"#8a6b4a",badge:"#e6d4c2"},
+  Hatha:{bg:"#e0ecf0",accent:"#4a6e8a",badge:"#c2d8e6"},
+};
+
+const formatTime=(t)=>{const[h,m]=t.split(":").map(Number);return`${h%12||12}:${m.toString().padStart(2,"0")} ${h>=12?"PM":"AM"}`};
+const genId=()=>"b"+Date.now()+Math.random().toString(36).slice(2,6);
+
+// localStorage helpers
+const loadData=(key,fallback)=>{try{const d=localStorage.getItem(key);return d?JSON.parse(d):fallback}catch{return fallback}};
+const saveData=(key,val)=>{try{localStorage.setItem(key,JSON.stringify(val))}catch{}};
+
+function App(){
+  const[classes,setClasses]=useState(()=>loadData("yoga-classes",DEFAULT_CLASSES));
+  const[bookings,setBookings]=useState(()=>loadData("yoga-bookings",[]));
+  const[view,setView]=useState("schedule");
+  const[selectedDay,setSelectedDay]=useState(null);
+  const[bookingModal,setBookingModal]=useState(null);
+  const[clientName,setClientName]=useState("");
+  const[clientEmail,setClientEmail]=useState("");
+  const[clientPhone,setClientPhone]=useState("");
+  const[toast,setToast]=useState(null);
+  const[filterType,setFilterType]=useState("All");
+  const[addClassModal,setAddClassModal]=useState(false);
+  const[newClass,setNewClass]=useState({name:"",day:"Monday",time:"09:00",duration:60,instructor:"Sage",capacity:12,type:"Vinyasa"});
+
+  useEffect(()=>{saveData("yoga-classes",classes)},[classes]);
+  useEffect(()=>{saveData("yoga-bookings",bookings)},[bookings]);
+
+  const showToast=useCallback((msg)=>{setToast(msg);setTimeout(()=>setToast(null),2500)},[]);
+  const getBookingsForClass=(cid)=>bookings.filter(b=>b.classId===cid);
+  const spotsLeft=(cls)=>cls.capacity-getBookingsForClass(cls.id).length;
+
+  const handleBook=()=>{
+    if(!clientName.trim())return showToast("Please enter client name / 이름을 입력하세요");
+    setBookings(prev=>[...prev,{id:genId(),classId:bookingModal.id,clientName:clientName.trim(),clientEmail:clientEmail.trim(),clientPhone:clientPhone.trim(),bookedAt:new Date().toISOString()}]);
+    showToast(`Booked! ${clientName.trim()} → ${bookingModal.name}`);
+    setBookingModal(null);setClientName("");setClientEmail("");setClientPhone("");
+  };
+
+  const cancelBooking=(bid,cname)=>{setBookings(prev=>prev.filter(b=>b.id!==bid));showToast(`Cancelled booking for ${cname}`)};
+
+  const addClass=()=>{
+    if(!newClass.name.trim())return showToast("Class name required");
+    setClasses(prev=>[...prev,{...newClass,id:"c"+Date.now(),name:newClass.name.trim()}]);
+    setAddClassModal(false);setNewClass({name:"",day:"Monday",time:"09:00",duration:60,instructor:"Sage",capacity:12,type:"Vinyasa"});
+    showToast(`Added: ${newClass.name.trim()}`);
+  };
+
+  const deleteClass=(cid)=>{setClasses(prev=>prev.filter(c=>c.id!==cid));setBookings(prev=>prev.filter(b=>b.classId!==cid));showToast("Class removed")};
+
+  const dayClasses=(day)=>{
+    let f=classes.filter(c=>c.day===day);
+    if(filterType!=="All")f=f.filter(c=>c.type===filterType);
+    return f.sort((a,b)=>a.time.localeCompare(b.time));
+  };
+
+  const uniqueClients=[...new Set(bookings.map(b=>b.clientName))].length;
+
+  return(
+    <div>
+      {/* Header */}
+      <header className="header">
+        <div className="header-inner">
+          <div>
+            <h1>🧘 Sage Yoga Studio</h1>
+            <p className="subtitle">Schedule & Booking System</p>
+          </div>
+          <div className="stats-row">
+            <div className="stat-box"><div className="num">{classes.length}</div><div className="label">Classes</div></div>
+            <div className="stat-box"><div className="num">{bookings.length}</div><div className="label">Bookings</div></div>
+            <div className="stat-box"><div className="num">{uniqueClients}</div><div className="label">Clients</div></div>
+          </div>
+        </div>
+      </header>
+
+      {/* Tabs */}
+      <div className="tabs">
+        {[{key:"schedule",label:"📅 Schedule"},{key:"bookings",label:"📋 Bookings"},{key:"manage",label:"⚙️ Manage"}].map(t=>(
+          <button key={t.key} className={`tab-btn ${view===t.key?"active":""}`} onClick={()=>setView(t.key)}>{t.label}</button>
+        ))}
+      </div>
+
+      <main className="main">
+
+        {/* SCHEDULE VIEW */}
+        {view==="schedule"&&(
+          <div className="fade-in">
+            <div className="pill-row">
+              <button className={`day-pill ${selectedDay===null?"active":""}`} onClick={()=>setSelectedDay(null)}>All</button>
+              {DAYS.map((d,i)=><button key={d} className={`day-pill ${selectedDay===d?"active":""}`} onClick={()=>setSelectedDay(d)}>{SHORT_DAYS[i]}</button>)}
+            </div>
+            <div className="pill-row">
+              {["All","Vinyasa","Yin","Power","Hatha"].map(t=>(
+                <button key={t} className="type-pill" onClick={()=>setFilterType(t)}
+                  style={{background:filterType===t?(TYPE_COLORS[t]?.accent||"#5a7c52"):"#e8e4dc",color:filterType===t?"#fff":"#6b6560"}}>{t}</button>
+              ))}
+            </div>
+            {(selectedDay?[selectedDay]:DAYS).map(day=>{
+              const dc=dayClasses(day);
+              if(!dc.length)return null;
+              return(
+                <div key={day} style={{marginBottom:24}}>
+                  <h3 style={{fontSize:20,fontWeight:600,marginBottom:10,color:"#5a5046"}}>{day}</h3>
+                  <div className="class-grid">
+                    {dc.map(cls=>{
+                      const tc=TYPE_COLORS[cls.type]||TYPE_COLORS.Hatha;
+                      const spots=spotsLeft(cls);
+                      return(
+                        <div key={cls.id} className="card" style={{borderLeft:`4px solid ${tc.accent}`}}>
+                          <span className="type-badge" style={{background:tc.badge,color:tc.accent}}>{cls.type}</span>
+                          <h4 className="class-name">{cls.name}</h4>
+                          <div className="class-info">
+                            <div>🕐 {formatTime(cls.time)} · {cls.duration} min</div>
+                            <div>👤 {cls.instructor}</div>
+                            <div>📍 {spots}/{cls.capacity} spots left</div>
+                          </div>
+                          <button className="btn btn-book" disabled={spots<=0}
+                            onClick={()=>{setBookingModal(cls);setClientName("");setClientEmail("");setClientPhone("")}}
+                            style={{background:spots>0?tc.accent:"#ccc",opacity:spots>0?1:0.6}}>
+                            {spots>0?"Book Now":"Full"}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* BOOKINGS VIEW */}
+        {view==="bookings"&&(
+          <div className="fade-in">
+            <h2 style={{fontSize:22,marginBottom:16}}>All Bookings</h2>
+            {bookings.length===0?(
+              <div className="empty">
+                <div className="empty-icon">📭</div>
+                <p>No bookings yet. Go to Schedule to book a class!</p>
+                <p style={{fontSize:13,marginTop:4}}>아직 예약이 없어요. 스케줄에서 수업을 예약하세요!</p>
+              </div>
+            ):(
+              <div style={{display:"flex",flexDirection:"column",gap:10}}>
+                {[...bookings].reverse().map(b=>{
+                  const cls=classes.find(c=>c.id===b.classId);
+                  if(!cls)return null;
+                  const tc=TYPE_COLORS[cls.type]||TYPE_COLORS.Hatha;
+                  return(
+                    <div key={b.id} className="booking-row" style={{borderLeft:`3px solid ${tc.accent}`}}>
+                      <div>
+                        <div className="booking-name">{b.clientName}</div>
+                        <div className="booking-detail">{cls.name} · {cls.day} {formatTime(cls.time)}{b.clientEmail&&` · ${b.clientEmail}`}</div>
+                      </div>
+                      <button className="btn btn-danger" onClick={()=>cancelBooking(b.id,cls.name)}>Cancel</button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* MANAGE VIEW */}
+        {view==="manage"&&(
+          <div className="fade-in">
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16,flexWrap:"wrap",gap:12}}>
+              <h2 style={{fontSize:22}}>Manage Classes</h2>
+              <button className="btn btn-add" onClick={()=>setAddClassModal(true)}>+ Add Class</button>
+            </div>
+            {DAYS.map(day=>{
+              const dc=classes.filter(c=>c.day===day).sort((a,b)=>a.time.localeCompare(b.time));
+              if(!dc.length)return null;
+              return(
+                <div key={day}>
+                  <div className="day-label">{day}</div>
+                  {dc.map(cls=>{
+                    const tc=TYPE_COLORS[cls.type]||TYPE_COLORS.Hatha;
+                    const bCount=getBookingsForClass(cls.id).length;
+                    return(
+                      <div key={cls.id} className="manage-row">
+                        <div className="manage-info">
+                          <span className="type-badge" style={{background:tc.badge,color:tc.accent,marginBottom:0}}>{cls.type}</span>
+                          <span style={{fontWeight:600}}>{cls.name}</span>
+                          <span className="manage-meta">{formatTime(cls.time)} · {cls.duration}min · {bCount}/{cls.capacity} booked</span>
+                        </div>
+                        <button className="btn btn-danger-sm" onClick={()=>deleteClass(cls.id)}>Delete</button>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+            <div className="reset-section">
+              <h4>Reset Data</h4>
+              <p>Reset to default classes and clear all bookings.</p>
+              <button className="btn btn-reset" onClick={()=>{setClasses(DEFAULT_CLASSES);setBookings([]);showToast("Reset to defaults")}}>Reset All</button>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* BOOKING MODAL */}
+      {bookingModal&&(
+        <div className="modal-overlay" onClick={()=>setBookingModal(null)}>
+          <div className="modal" onClick={e=>e.stopPropagation()}>
+            <h3>Book a Spot</h3>
+            <p className="modal-sub">{bookingModal.name} · {bookingModal.day} {formatTime(bookingModal.time)}</p>
+            <div className="form-group">
+              <label className="form-label">Client Name *</label>
+              <input className="form-input" value={clientName} onChange={e=>setClientName(e.target.value)} placeholder="이름 / Name"/>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Email</label>
+              <input className="form-input" value={clientEmail} onChange={e=>setClientEmail(e.target.value)} placeholder="email@example.com" type="email"/>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Phone</label>
+              <input className="form-input" value={clientPhone} onChange={e=>setClientPhone(e.target.value)} placeholder="Phone number" type="tel"/>
+            </div>
+            <div className="modal-actions">
+              <button className="btn btn-secondary" onClick={()=>setBookingModal(null)}>Cancel</button>
+              <button className="btn btn-primary" onClick={handleBook}>Confirm Booking</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ADD CLASS MODAL */}
+      {addClassModal&&(
+        <div className="modal-overlay" onClick={()=>setAddClassModal(false)}>
+          <div className="modal" onClick={e=>e.stopPropagation()}>
+            <h3 style={{marginBottom:16}}>Add New Class</h3>
+            <div className="form-group">
+              <label className="form-label">Class Name *</label>
+              <input className="form-input" value={newClass.name} onChange={e=>setNewClass({...newClass,name:e.target.value})} placeholder="e.g. Morning Flow"/>
+            </div>
+            <div className="form-row" style={{marginBottom:12}}>
+              <div><label className="form-label">Day</label>
+                <select className="form-input" value={newClass.day} onChange={e=>setNewClass({...newClass,day:e.target.value})}>
+                  {DAYS.map(d=><option key={d}>{d}</option>)}
+                </select></div>
+              <div><label className="form-label">Time</label>
+                <input className="form-input" type="time" value={newClass.time} onChange={e=>setNewClass({...newClass,time:e.target.value})}/></div>
+            </div>
+            <div className="form-row" style={{marginBottom:12}}>
+              <div><label className="form-label">Type</label>
+                <select className="form-input" value={newClass.type} onChange={e=>setNewClass({...newClass,type:e.target.value})}>
+                  {["Vinyasa","Yin","Power","Hatha"].map(t=><option key={t}>{t}</option>)}
+                </select></div>
+              <div><label className="form-label">Duration (min)</label>
+                <input className="form-input" type="number" value={newClass.duration} onChange={e=>setNewClass({...newClass,duration:parseInt(e.target.value)||60})}/></div>
+            </div>
+            <div className="form-row" style={{marginBottom:0}}>
+              <div><label className="form-label">Instructor</label>
+                <input className="form-input" value={newClass.instructor} onChange={e=>setNewClass({...newClass,instructor:e.target.value})}/></div>
+              <div><label className="form-label">Capacity</label>
+                <input className="form-input" type="number" value={newClass.capacity} onChange={e=>setNewClass({...newClass,capacity:parseInt(e.target.value)||12})}/></div>
+            </div>
+            <div className="modal-actions">
+              <button className="btn btn-secondary" onClick={()=>setAddClassModal(false)}>Cancel</button>
+              <button className="btn btn-primary" onClick={addClass}>Add Class</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TOAST */}
+      {toast&&<div className="toast">{toast}</div>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("app")).render(<App/>);
+</script>
+</body>
+</html>
