@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sage Yoga Studio - Schedule & Booking</title>
 <meta name="description" content="Book yoga classes at Sage Yoga Studio. Vinyasa, Yin, Power, and Hatha classes available.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5a7c52">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sage Yoga">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -419,6 +426,16 @@ function App(){
 }
 
 ReactDOM.createRoot(document.getElementById("app")).render(<App/>);
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('SW registered'))
+      .catch((err) => console.log('SW registration failed:', err));
+  });
+}
 </script>
 </body>
 </html>
